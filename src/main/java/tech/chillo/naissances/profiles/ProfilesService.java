@@ -1,10 +1,12 @@
 package tech.chillo.naissances.profiles;
 
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import tech.chillo.naissances.shared.services.ValidationsService;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,9 +16,12 @@ import java.util.Optional;
 @Service
 public class ProfilesService {
     private final ProfilesRepository profilesRepository;
+    private final ValidationsService validationsService;
 
     public void create(Profile profile) {
         log.info("Nouveau compte avec l'email {}", profile.getEmail() );
+        this.validationsService.validateEmail(profile.getEmail());
+        this.validationsService.validatePhone(profile.getPhone());
         this.profilesRepository.save(profile);
 
     }
@@ -27,7 +32,8 @@ public class ProfilesService {
 
     public Profile read(int id) {
         Optional<Profile> profileOptional = this.profilesRepository.findById(id);
-        return profileOptional.orElse(null);
+        return profileOptional.orElseThrow(() -> new EntityNotFoundException(
+                "Aucune entité ne correspond aux paramètres fournis"));
     }
 
     public Profile update(int id, Profile profile) {
@@ -42,5 +48,8 @@ public class ProfilesService {
         return profileInDatabase;
     }
 
-
+    public void delete(int id) {
+        Profile profile = this.read(id);
+        this.profilesRepository.delete(profile);
+    }
 }
