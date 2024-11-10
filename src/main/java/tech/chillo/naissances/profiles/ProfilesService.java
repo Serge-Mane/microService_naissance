@@ -1,18 +1,21 @@
 package tech.chillo.naissances.profiles;
 
 
-import org.slf4j.LoggerFactory;
+import lombok.AllArgsConstructor;
 
-import org.slf4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
+@AllArgsConstructor
 @Service
 public class ProfilesService {
+    private final ProfilesRepository profilesRepository;
 
-    Logger logger = LoggerFactory.getLogger(ProfilesService.class);
     public void create(Profile profile) {
 
-        logger.info("Nouveau compte avec l'email {}", profile.getEmail() );
+        log.info("Nouveau compte avec l'email {}", profile.getEmail() );
+        this.profilesRepository.save(profile);
 
     }
 }

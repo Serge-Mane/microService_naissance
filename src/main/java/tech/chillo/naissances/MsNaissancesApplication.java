@@ -11,10 +11,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 @SpringBootApplication(
 		exclude = {
 				SecurityAutoConfiguration.class,
-				ManagementWebSecurityAutoConfiguration.class,
-				DataSourceTransactionManagerAutoConfiguration.class,
-				DataSourceAutoConfiguration.class,
-				HibernateJpaAutoConfiguration.class
+				ManagementWebSecurityAutoConfiguration.class
 		}
 )
 public class MsNaissancesApplication {
