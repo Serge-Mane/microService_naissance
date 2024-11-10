@@ -29,4 +29,18 @@ public class ProfilesService {
         Optional<Profile> profileOptional = this.profilesRepository.findById(id);
         return profileOptional.orElse(null);
     }
+
+    public Profile update(int id, Profile profile) {
+        Profile profileInDatabase = this.read(id);
+
+        profileInDatabase.setFirstName(profile.getFirstName());
+        profileInDatabase.setLastName(profile.getLastName());
+        profileInDatabase.setEmail(profile.getEmail());
+        profileInDatabase.setPhone(profile.getPhone());
+
+        profileInDatabase = this.profilesRepository.save(profileInDatabase);
+        return profileInDatabase;
+    }
+
+
 }

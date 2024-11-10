@@ -40,4 +40,9 @@ public class ProfilesController {
         return this.profilesService.read(id);
     }
 
+    @PutMapping(path = "{id}")
+    public Profile update(@PathVariable int id, @RequestBody Profile profile) {
+        return this.profilesService.update(id, profile);
+    }
+
 }
