@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import tech.chillo.naissances.shared.entities.Address;
 
 @Setter
 @Getter
@@ -23,4 +24,8 @@ public class Profile {
     private String email;
     private String phone;
     private String password;
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH})
+    @JoinColumn(name = "addresses_id")
+    private Address address;
 }

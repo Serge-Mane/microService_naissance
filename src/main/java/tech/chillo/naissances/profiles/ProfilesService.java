@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import tech.chillo.naissances.shared.entities.Address;
+import tech.chillo.naissances.shared.services.AddressesService;
 import tech.chillo.naissances.shared.services.ValidationsService;
 
 import java.util.List;
@@ -15,11 +17,16 @@ import java.util.Optional;
 @AllArgsConstructor
 @Service
 public class ProfilesService {
+    private final AddressesService addressesService;
     private final ProfilesRepository profilesRepository;
     private final ValidationsService validationsService;
 
     public void create(Profile profile) {
         log.info("Nouveau compte avec l'email {}", profile.getEmail() );
+        if(profile.getAddress() != null) {
+            Address address = this.addressesService.create(profile.getAddress());
+            profile.setAddress(address);
+        }
         this.validationsService.validateEmail(profile.getEmail());
         this.validationsService.validatePhone(profile.getPhone());
         this.profilesRepository.save(profile);
