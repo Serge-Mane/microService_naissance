@@ -1,12 +1,9 @@
 package tech.chillo.naissances.profiles;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import tech.chillo.naissances.shared.entities.Address;
-
+@Builder
 @Setter
 @Getter
 @AllArgsConstructor
