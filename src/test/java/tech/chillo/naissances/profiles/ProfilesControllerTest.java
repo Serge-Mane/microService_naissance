@@ -13,7 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.when;
@@ -34,9 +34,9 @@ class ProfilesControllerTest {
 
     @BeforeEach
     void setUp() {
-        Profile profileOne = Profile.builder().email("one@email.test").build();
-        Profile profileTwo = Profile.builder().email("two@email.test").build();
-        when(profilesService.search()).thenReturn(List.of(profileOne, profileTwo));
+        ProfileDTO profileOne = new ProfileDTO(null, null, null, "one@email.com", null, null);
+        ProfileDTO profileTwo = new ProfileDTO(null, null, null, "two@email.test", null, null);
+        when(profilesService.search()).thenReturn(Set.of(profileOne, profileTwo));
     }
 
     @DisplayName("Lire une liste de profiles")

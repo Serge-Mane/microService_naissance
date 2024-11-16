@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -33,7 +34,7 @@ class ProfilesServiceTest {
                         )
                 );
         // Act
-        List<Profile> profiles = this.profilesService.search();
+        Set<ProfileDTO> profiles = this.profilesService.search();
 
         // Assert
         assertEquals(1, profiles.size());

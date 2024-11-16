@@ -6,41 +6,28 @@ import lombok.AllArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import tech.chillo.naissances.shared.entities.Address;
-import tech.chillo.naissances.shared.services.AddressesService;
-import tech.chillo.naissances.shared.services.ValidationsService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @AllArgsConstructor
 @Service
 public class ProfilesService {
-    private final AddressesService addressesService;
     private final ProfilesRepository profilesRepository;
-    private final ValidationsService validationsService;
+    private final ProfileMapper profileMapper;
 
-    public void create(Profile profile) {
-        log.info("Nouveau compte avec l'email {}", profile.getEmail() );
-        if(profile.getAddress() != null) {
-            Address address = this.addressesService.create(profile.getAddress());
-            profile.setAddress(address);
-        }
-        this.validationsService.validateEmail(profile.getEmail());
-        this.validationsService.validatePhone(profile.getPhone());
-        this.profilesRepository.save(profile);
+    public Set<ProfileDTO> search() {
 
-    }
-
-    public List<Profile> search() {
-        return this.profilesRepository.findAll();
+        List<Profile> profiles = this.profilesRepository.findAll();
+        return profiles.stream().map(this.profileMapper::entityToDto).collect(Collectors.toSet());
     }
 
     public Profile read(int id) {
         Optional<Profile> profileOptional = this.profilesRepository.findById(id);
-        return profileOptional.orElseThrow(() -> new EntityNotFoundException(
-                "Aucune entité ne correspond aux paramètres fournis"));
+        return profileOptional.orElseThrow(() -> new EntityNotFoundException("Aucune entité ne correspond aux paramètres fournis"));
     }
 
     public Profile update(int id, Profile profile) {
