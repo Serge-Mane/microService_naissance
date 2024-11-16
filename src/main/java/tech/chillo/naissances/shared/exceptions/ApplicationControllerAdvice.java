@@ -11,7 +11,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Slf4j
-@@RestControllerAdvice
+@RestControllerAdvice
 public class ApplicationControllerAdvice {
 
     @ResponseStatus(value = NOT_FOUND)
