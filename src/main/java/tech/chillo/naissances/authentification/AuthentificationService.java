@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import tech.chillo.naissances.profiles.Profile;
-import tech.chillo.naissances.profiles.ProfileDTO;
-import tech.chillo.naissances.profiles.ProfileMapper;
-import tech.chillo.naissances.profiles.ProfilesRepository;
+import tech.chillo.naissances.profiles.*;
 import tech.chillo.naissances.shared.services.ValidationsService;
 
 @Slf4j
@@ -16,6 +13,7 @@ import tech.chillo.naissances.shared.services.ValidationsService;
 public class AuthentificationService {
     private ProfileMapper profileMapper;
     private ProfilesRepository profilesRepository;
+    private RolesRepository rolesRepository;
     private final ValidationsService validationsService;
     private final BCryptPasswordEncoder passwordEncoder;
 
@@ -26,6 +24,9 @@ public class AuthentificationService {
         String userPassword = profile.getPassword();
         String encodedPassword =  this.passwordEncoder.encode(userPassword);
         profile.setPassword(encodedPassword);
+
+        Role role = this.rolesRepository.findByName("PUBLIC");
+        profile.setRole(role);
 
         this.validationsService.validateEmail(profile.getEmail());
         this.validationsService.validatePhone(profile.getPhone());
