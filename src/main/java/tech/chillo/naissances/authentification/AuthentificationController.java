@@ -1,26 +1,44 @@
 package tech.chillo.naissances.authentification;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import tech.chillo.naissances.profiles.Profile;
 import tech.chillo.naissances.profiles.ProfileDTO;
+import tech.chillo.naissances.security.token.JWTService;
 
 import java.util.Map;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
+@Slf4j
 @AllArgsConstructor
 @RequestMapping(consumes = APPLICATION_JSON_VALUE)
 @RestController
 public class AuthentificationController {
 
-    private AuthentificationService authentificationService;
+    private final AuthentificationService authentificationService;
+    private final JWTService jwtService;
+    private final AuthenticationManager authenticationManager;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(path = "sign-up")
     public void create(@RequestBody ProfileDTO profileDTO) {
         this.authentificationService.create(profileDTO);
+    }
+
+    @PostMapping(path = "sign-in")
+    public @ResponseBody Map<String, String> login(@RequestBody Map<String, String> parameters) {
+        Authentication authentication = this.authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        parameters.get("email"),
+                        parameters.get("password")
+                )
+        );
+        String bearer = jwtService.generate(authentication);
+        return Map.of("bearer", bearer);
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)

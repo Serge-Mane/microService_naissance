@@ -2,6 +2,9 @@ package tech.chillo.naissances.authentification;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import tech.chillo.naissances.notifications.EmailsService;
@@ -16,7 +19,7 @@ import java.util.Map;
 @Slf4j
 @AllArgsConstructor
 @Service
-public class AuthentificationService {
+public class AuthentificationService implements UserDetailsService {
     private final ProfileMapper profileMapper;
     private final ProfilesRepository profilesRepository;
     private final RolesRepository rolesRepository;
@@ -56,5 +59,10 @@ public class AuthentificationService {
         Profile profile = this.activationsService.validateAndReturnProfile(parameters);
         profile.setActive(true);
         this.profilesRepository.save(profile);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return this.profilesRepository.findByEmail(username).orElseThrow(() -> new RuntimeException("Aucun utilisateur ne corresonds aux critères saisis"));
     }
 }
