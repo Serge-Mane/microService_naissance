@@ -34,8 +34,8 @@ class ProfilesControllerTest {
 
     @BeforeEach
     void setUp() {
-        ProfileDTO profileOne = new ProfileDTO(null, null, null, "one@email.com", null, null);
-        ProfileDTO profileTwo = new ProfileDTO(null, null, null, "two@email.test", null, null);
+        ProfileDTO profileOne =  ProfileDTO.builder().email("one@email.com").build();
+        ProfileDTO profileTwo = ProfileDTO.builder().email("two@email.com").build();
         when(profilesService.search()).thenReturn(Set.of(profileOne, profileTwo));
     }
 

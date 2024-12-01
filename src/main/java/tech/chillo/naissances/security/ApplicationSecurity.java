@@ -53,11 +53,11 @@ public class ApplicationSecurity {
                                                 .requestMatchers(HttpMethod.POST, "/sign-in").permitAll()
                                                 .requestMatchers(HttpMethod.POST, "/sign-up").permitAll()
                                                 .requestMatchers(HttpMethod.POST, "/activate").permitAll()
+                                                .requestMatchers("/logout").permitAll()
                                                 .anyRequest().authenticated()
                         )
                         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                         .oauth2ResourceServer(oauth -> oauth.jwt(Customizer.withDefaults()))
-                        .httpBasic(Customizer.withDefaults())
                         .build();
     }
 

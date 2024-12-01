@@ -16,11 +16,16 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Slf4j
 @AllArgsConstructor
 @RestController
-@RequestMapping("profiles")
+@RequestMapping({"profiles"})
 public class ProfilesController {
 
     private final ProfilesService profilesService;
 
+
+    @GetMapping(path = "read", produces = APPLICATION_JSON_VALUE)
+    public ProfileDTO getCurrentUser() {
+        return this.profilesService.getCurrentUser();
+    }
 
     @GetMapping(produces = APPLICATION_JSON_VALUE)
     public Set<ProfileDTO> search() {

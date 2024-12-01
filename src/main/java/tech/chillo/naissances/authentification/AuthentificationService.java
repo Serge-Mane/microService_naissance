@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import tech.chillo.naissances.notifications.EmailsService;
-import tech.chillo.naissances.notifications.MailpitClient;
 import tech.chillo.naissances.profiles.*;
 import tech.chillo.naissances.security.activations.Activation;
 import tech.chillo.naissances.security.activations.ActivationsService;
@@ -20,7 +19,7 @@ import java.util.Map;
 @AllArgsConstructor
 @Service
 public class AuthentificationService implements UserDetailsService {
-    private final ProfileMapper profileMapper;
+    private final ProfilesMapper profilesMapper;
     private final ProfilesRepository profilesRepository;
     private final RolesRepository rolesRepository;
     private final EmailsService emailsService;
@@ -29,8 +28,8 @@ public class AuthentificationService implements UserDetailsService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     public void create(ProfileDTO profileDTO) {
-        log.info("Nouveau compte avec l'email {}", profileDTO.email() );
-        Profile profile = this.profileMapper.dtoToEntity(profileDTO);
+        log.info("Nouveau compte avec l'email {}", profileDTO.getEmail() );
+        Profile profile = this.profilesMapper.dtoToEntity(profileDTO);
 
         String userPassword = profile.getPassword();
         String encodedPassword =  this.passwordEncoder.encode(userPassword);
