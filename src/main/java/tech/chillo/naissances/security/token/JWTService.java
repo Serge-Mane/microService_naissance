@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,12 +22,16 @@ public class JWTService {
     private final JwtEncoder jwtEncoder;
     public String generate(Authentication authentication) {
         Instant now = Instant.now();
+
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        Set<String> scopes = authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
         JwtClaimsSet jwtClaimsSet = JwtClaimsSet
                 .builder()
                 .issuedAt(now)
                 .expiresAt(now.plus(1, ChronoUnit.HOURS))
                 .subject(authentication.getName())
                 .claim("username", authentication.getName())
+                .claim("scp", scopes)
                 .issuer("self")
 
                 .build();

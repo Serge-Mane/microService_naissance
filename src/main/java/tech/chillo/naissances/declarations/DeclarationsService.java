@@ -2,6 +2,7 @@ package tech.chillo.naissances.declarations;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import tech.chillo.naissances.notifications.EmailsService;
 import tech.chillo.naissances.profiles.Profile;
 import tech.chillo.naissances.profiles.ProfilesService;
 import tech.chillo.naissances.security.services.SecurityService;
@@ -18,13 +19,14 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class DeclarationsService {
-    private DeclarationsMapper declarationsMapper;
-    private CompaniesService companiesService;
-    private StatusService statusService;
-    private ProfilesService profilesService;
-    private SecurityService securityService;
-    private DeclarationsRepository declarationsRepository;
-    private DeclarationsStatusRepository declarationsStatusRepository;
+    private final EmailsService emailsService;
+    private final DeclarationsMapper declarationsMapper;
+    private final CompaniesService companiesService;
+    private final StatusService statusService;
+    private final ProfilesService profilesService;
+    private final SecurityService securityService;
+    private final DeclarationsRepository declarationsRepository;
+    private final DeclarationsStatusRepository declarationsStatusRepository;
 
     public void create(Declaration declaration) {
 
@@ -82,6 +84,7 @@ public class DeclarationsService {
                 .declaration(declaration)
                 .registered(LocalDateTime.now())
                 .build();
-        this.declarationsStatusRepository.save(declarationStatus);
+         declarationStatus = this.declarationsStatusRepository.save(declarationStatus);
+        this.emailsService.sendStatusNotification(declarationStatus);
     }
 }

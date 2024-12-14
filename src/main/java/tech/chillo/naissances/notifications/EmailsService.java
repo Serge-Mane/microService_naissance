@@ -6,6 +6,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tech.chillo.naissances.declarations.DeclarationStatus;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -56,5 +57,36 @@ public class EmailsService {
         } catch (TemplateException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void sendStatusNotification(DeclarationStatus declarationStatus) {
+        String message = String.format(
+                """
+                    Bonjour %s %s, <br />
+                    Votre déclaration a été traitée. <br />
+                    Elle est désormais %s<br />
+                    Cordialement,
+                    %s
+                """,
+                declarationStatus.getDeclaration().getFirstParent().getFirstName(),
+                declarationStatus.getDeclaration().getFirstParent().getLastName(),
+                declarationStatus.getStatus().getName(),
+                senderName
+        );
+
+        Map<String, Object> emailParameters = Map.of(
+                "Subject", "Mis à jour de votre déclaration",
+                "HTML", message,
+                "text", message,
+                "From",  Map.of("Email",senderEmail, "Name", senderName),
+                "To", List.of(Map.of(
+                        "Email", declarationStatus.getDeclaration().getFirstParent().getEmail(),
+                        "Name", String.format(
+                                "%s %s",
+                                declarationStatus.getDeclaration().getFirstParent().getFirstName(),
+                                declarationStatus.getDeclaration().getFirstParent().getLastName())
+                        ))
+        );
+        this.mailpitClient.send(emailParameters);
     }
 }

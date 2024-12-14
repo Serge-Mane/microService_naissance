@@ -25,6 +25,7 @@ public class DeclarationsController {
         this.declarationsService.create(declaration);
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_DECLARATION_UPDATE')")
     @PatchMapping(path = "{id}/status", consumes = APPLICATION_JSON_VALUE)
     public void updateStatus(@PathVariable int id, @RequestBody Map<String, String> params) {
         this.declarationsService.updateStatus(id, params);
