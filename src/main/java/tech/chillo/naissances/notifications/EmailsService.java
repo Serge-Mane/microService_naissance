@@ -17,8 +17,8 @@ import java.util.Map;
 @Component
 public class EmailsService {
     private MailpitClient mailpitClient;
-    String senderEmail = "achille@mesnaissances.com";
-    String senderName = "Achille de mesnaissances.com";
+    String senderEmail = "Serge@mesnaissances.com";
+    String senderName = "Serge de mesnaissances.com";
 
     public EmailsService(MailpitClient mailpitClient) {
         this.mailpitClient = mailpitClient;
