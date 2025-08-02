@@ -9,7 +9,8 @@ import tech.chillo.naissances.notifications.MailpitClient;
 
 @Configuration
 public class ApplicationConfigurations {
-    String mailClientUrl = "http://training.mails.chillo.fr";
+    String mailClientUrl ="http://training.mails.chillo.fr";
+
     @Bean
     MailpitClient mailpitClient() {
         RestClient client = RestClient.create(mailClientUrl);
